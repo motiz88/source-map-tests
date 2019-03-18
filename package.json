@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "jest": "^24.5.0",
+    "source-map-0.4.4": "npm:source-map@0.4.4",
+    "source-map-0.5.7": "npm:source-map@0.5.7",
+    "source-map-0.6.1": "npm:source-map@0.6.1",
+    "source-map-0.7.3": "npm:source-map@0.7.3"
+  },
+  "engines": {
+    "node": ">= 10"
+  }
+}
