@@ -1,6 +1,6 @@
 # source-map-tests
 
-A test suite for known bugs in various versions of
+A test suite for known bugs and edge cases in various versions of
 [`source-map`](https://github.com/mozilla/source-map).
 
 ## Prerequisites
