@@ -120,8 +120,14 @@ describe.each(implementations)('source-map %s', (version, api) => {
     expect(consumer.originalPositionFor({line: 1, column: 0})).toEqual(
       objectContaining({source: 'foo.js', line: 1, column: 0}),
     );
+    expect(consumer.originalPositionFor({line: 1, column: 1})).toEqual(
+      objectContaining({source: 'bar.js', line: 2, column: 1}),
+    );
     expect(consumer.originalPositionFor({line: 1, column: 2})).toEqual(
-      objectContaining({source: 'baz.js', line: 1, column: 2}),
+      objectContaining({source: 'baz.js', line: 1, column: 0}),
+    );
+    expect(consumer.originalPositionFor({line: 1, column: 3})).toEqual(
+      objectContaining({source: 'quux.js', line: 2, column: 1}),
     );
   });
 
