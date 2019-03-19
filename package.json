@@ -4,7 +4,8 @@
     "source-map-0.4.4": "npm:source-map@0.4.4",
     "source-map-0.5.7": "npm:source-map@0.5.7",
     "source-map-0.6.1": "npm:source-map@0.6.1",
-    "source-map-0.7.3": "npm:source-map@0.7.3"
+    "source-map-0.7.3": "npm:source-map@0.7.3",
+    "source-map-master": "https://github.com/mozilla/source-map#7adff2c69c6f2448925c94600c2eade0fbf078d7"
   },
   "engines": {
     "node": ">= 10"

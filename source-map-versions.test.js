@@ -2,7 +2,7 @@ const implementations = require('./implementations');
 const fs = require('fs').promises;
 const {objectContaining} = expect;
 
-describe.each(implementations)('source-map v%s', (version, api) => {
+describe.each(implementations)('source-map %s', (version, api) => {
   it('accepts mappings without sources in an indexed map', async () => {
     const map = await fs.readFile(
       __dirname + '/fixtures/indexed-null-source.json',
@@ -14,14 +14,14 @@ describe.each(implementations)('source-map v%s', (version, api) => {
       mappings.push(mapping);
     });
     expect(mappings).toEqual([
-      {
+      objectContaining({
         source: null,
         generatedLine: 1,
         generatedColumn: 0,
         originalLine: null,
         originalColumn: null,
         name: null,
-      },
+      }),
     ]);
   });
 
@@ -93,5 +93,52 @@ describe.each(implementations)('source-map v%s', (version, api) => {
         originalColumn: 1,
       }),
     ]);
+  });
+
+  it('supports unmapped sections in an indexed map', async () => {
+    const map = await fs.readFile(
+      __dirname + '/fixtures/indexed-unmapped-section.json',
+      'utf8',
+    );
+    const consumer = await new api.SourceMapConsumer(map);
+    expect(consumer.originalPositionFor({line: 2, column: 0})).toEqual(
+      expect.objectContaining({
+        source: null,
+        line: null,
+        column: null,
+        name: null,
+      }),
+    );
+  });
+
+  it('performs lookup correctly in an indexed map', async () => {
+    const map = await fs.readFile(
+      __dirname + '/fixtures/indexed-multiple-sections.json',
+      'utf8',
+    );
+    const consumer = await new api.SourceMapConsumer(map);
+    expect(consumer.originalPositionFor({line: 1, column: 0})).toEqual(
+      objectContaining({source: 'foo.js', line: 1, column: 0}),
+    );
+    expect(consumer.originalPositionFor({line: 1, column: 2})).toEqual(
+      objectContaining({source: 'baz.js', line: 1, column: 2}),
+    );
+  });
+
+  it('performs lookup correctly in a non-indexed map', async () => {
+    const map = await fs.readFile(
+      __dirname + '/fixtures/simple-map.json',
+      'utf8',
+    );
+    const consumer = await new api.SourceMapConsumer(map);
+    expect(consumer.originalPositionFor({line: 1, column: 0})).toEqual(
+      objectContaining({source: 'foo.js', line: 1, column: 0, name: 'first'}),
+    );
+    expect(consumer.originalPositionFor({line: 1, column: 1})).toEqual(
+      objectContaining({source: 'bar.js', line: 2, column: 1, name: 'second'}),
+    );
+    expect(consumer.originalPositionFor({line: 1, column: 2})).toEqual(
+      objectContaining({source: 'bar.js', line: 2, column: 1, name: 'second'}),
+    );
   });
 });
